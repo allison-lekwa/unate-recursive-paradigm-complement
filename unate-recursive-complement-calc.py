@@ -20,14 +20,17 @@ def File_To_List_Converter (input_file):
 
 # this was not stipulated, so you can leave it out
 def ValidateFunc(num_of_cubes, func):
-    if num_of_cubes != len(func):
+    if num_of_cubes != len(func) and len(func) != 0: # Factor empty cube list
         return False, 'invalid function!!! Cubelist must be equal'\
             ' to number of individual expressions'
     else:
         for i in range(0, len(func)):
             if func[i][0] != len(func[i]) - 1:
+                var = str(func[i])
+                line_num = str(i+3)
                 return False, 'Invalid!!! number of dont cares do not equal '\
-                        'to number of variables for' + func[i] + 'check line' + i
+                        'to number of variables for {0},'\
+                            ' check line {1}'.format(var, line_num)
         return True, 'valid'
     
 # handles when we have at least a dont care cube    
@@ -51,7 +54,8 @@ def Complement(num_of_vars, num_of_cubes, func):
 
 def Output_To_File(num_of_vars, func_complement, isValid, reason):
     now = datetime.now() # current date and time
-    file=open("Output"+now,"w")
+    output_file = 'output/output-' + now.strftime('%d-%m-%Y') + '.pcn'
+    file=open(output_file,"w")
     file.write(str(num_of_vars)+"\n")
     file.write(str(len(func_complement))+"\n")
     for x in func_complement:
@@ -90,5 +94,6 @@ def main ():
         print(i)
     print(reason)
     input_file.close()
+    #Chinedu Okwuduri
 
 main()
