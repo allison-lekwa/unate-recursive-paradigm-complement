@@ -29,12 +29,12 @@ def ValidateFunc(num_of_cubes, func):
                 return False, 'Invalid!!! number of dont cares do not equal '\
                         'to number of variables for' + func[i] + 'check line' + i
         return True, 'valid'
+    
+# handles when we have at least a dont care cube    
 def Check_Cube_List_With_Dont_Cares(num_of_cubes, func):
     dont_care_flag = False # set initial state of number of dont care cube list to false
-    if len(func) != num_of_cubes: #number of cube lists must equal to number of functions
-        return not(dont_care_flag)
     for i in range(0, len(func)):
-        if func[i][0] == 0 and len(func[i]) == 1: #check if the number of "not dont care" is zero
+        if func[i][0] == 0: #check if the number of "not dont care" is zero
             return not(dont_care_flag)
     return dont_care_flag
 
