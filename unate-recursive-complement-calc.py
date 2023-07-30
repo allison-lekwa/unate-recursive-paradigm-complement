@@ -29,6 +29,25 @@ def ValidateFunc(num_of_cubes, func):
                 return False, 'Invalid!!! number of dont cares do not equal '\
                         'to number of variables for' + func[i] + 'check line' + i
         return True, 'valid'
+def Check_Cube_List_With_Dont_Cares(num_of_cubes, func):
+    dont_care_flag = False # set initial state of number of dont care cube list to false
+    if len(func) != num_of_cubes: #number of cube lists must equal to number of functions
+        return not(dont_care_flag)
+    for i in range(0, len(func)):
+        if func[i][0] == 0 and len(func[i]) == 1: #check if the number of "not dont care" is zero
+            return not(dont_care_flag)
+    return dont_care_flag
+
+def Complement(num_of_vars, num_of_cubes, func):
+    print(len(func))
+    if len(func) == 0: # function has empty cube list
+        return [[ '11' for i in range(0, num_of_vars)]] # Complement zeros
+    
+    dont_care_flag = Check_Cube_List_With_Dont_Cares(num_of_cubes, func)
+    if dont_care_flag: #function has at least a cube with dont cares
+        return [[ '00' for i in range(0, num_of_vars)]] # Complement dont cares i.e '1'
+    else:
+        return
 
 def Output_To_File(num_of_vars, func_complement, isValid, reason):
     now = datetime.now() # current date and time
@@ -62,11 +81,14 @@ def main ():
     
     num_of_vars, num_of_cubes, func = File_To_List_Converter(input_file)
     isValid, reason = ValidateFunc(num_of_cubes, func)
-    if not(isValid): 
-        Output_To_File(num_of_vars, func, isValid, reason)
-        print("--BOOLEAN FUNCTION PCN IS INVALID ---")
-        print(reason)
-        input_file.close()
-    
+    if isValid:
+        func = Complement(num_of_vars, num_of_cubes, func)
+        
+    Output_To_File(num_of_vars, func, isValid, reason)
+    print("--BOOLEAN FUNCTION PCN COMPLEMENT ---")
+    for i in func:
+        print(i)
+    print(reason)
+    input_file.close()
 
 main()
